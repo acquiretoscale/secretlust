@@ -31,7 +31,7 @@ export default function AdminPage() {
       .from("videos")
       .select("*")
       .order("created_at", { ascending: false });
-    setVideos(data || []);
+    setVideos((data as Video[]) || []);
   }, []);
 
   useEffect(() => {

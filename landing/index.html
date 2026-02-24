@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SecretlustAI – Generate adult AI videos. Explore templates and create your own with AI. New videos added daily.">
+  <meta name="keywords" content="AI video generator, adult AI, NSFW AI, AI porn, video templates">
+  <meta property="og:title" content="SecretlustAI – Adult AI Video Generator">
+  <meta property="og:description" content="Explore AI-generated adult video templates. Click to create your own.">
+  <meta property="og:type" content="website">
+  <title>SecretlustAI – Adult AI Video Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ══════ HEADER ══════ -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 2C6.03 2 2 6.03 2 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm1 14.5v-4.5H8V10h4V7.5l3.5 3.5-3.5 3.5z" fill="white"/>
+          </svg>
+        </span>
+        <span class="logo-text">SecretlustAI</span>
+      </a>
+      <a href="login.html" class="btn-credits">
+        <span class="credits-star">★</span>
+        GET CREDITS
+      </a>
+    </div>
+  </header>
+
+  <!-- ══════ TABS ══════ -->
+  <div class="tabs-bar">
+    <a href="#" class="tab active">Explore</a>
+    <a href="login.html" class="tab">Mine</a>
+  </div>
+
+  <!-- ══════ MAIN ══════ -->
+  <main class="main">
+
+    <!-- Featured / Hero card (first video marked featured:true in data/videos.js) -->
+    <div class="featured-card" id="featured-card">
+      <!-- Background video/img loaded by JS -->
+      <div class="featured-bg">
+        <video id="featured-video" autoplay muted loop playsinline preload="none"></video>
+        <div class="featured-overlay"></div>
+      </div>
+      <!-- HOT corner badge -->
+      <div class="hot-badge">HOT</div>
+      <!-- Info -->
+      <div class="featured-info">
+        <span class="users-count">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5.5" cy="4.5" r="2.5" stroke="white" stroke-width="1.2"/><path d="M1 12c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4" stroke="white" stroke-width="1.2" stroke-linecap="round"/><circle cx="10" cy="4.5" r="2" stroke="white" stroke-width="1.2"/><path d="M12 12c0-1.5-1-2.8-2.5-3.3" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span id="featured-users">5.8K Users</span>
+        </span>
+        <h1 class="featured-title" id="featured-title">Loading...</h1>
+        <p class="featured-sub" id="featured-sub">Use this template to generate your own AI video</p>
+        <a href="login.html" class="btn-create">✦ Create Now</a>
+      </div>
+    </div>
+
+    <!-- ══════ VIDEO GRID (masonry columns) ══════ -->
+    <!-- First 10 cards are rendered in HTML for SEO + speed. Rest load on scroll via JS. -->
+    <div class="video-grid" id="video-grid">
+      <!-- JS populates this on DOMContentLoaded + scroll -->
+    </div>
+
+    <!-- Scroll sentinel: when this enters viewport, next batch loads -->
+    <div id="scroll-sentinel"></div>
+    <div id="loading-spinner" class="spinner" style="display:none;">
+      <span></span><span></span><span></span>
+    </div>
+
+  </main>
+
+  <!-- ══════ FOOTER ══════ -->
+  <footer class="footer">
+    <div class="footer-line">
+      <a href="#">Legal</a>
+      <span class="sep">·</span>
+      <a href="#">Terms</a>
+      <span class="sep">·</span>
+      <a href="#">Privacy</a>
+      <span class="sep">·</span>
+      <a href="#">DMCA</a>
+      <span class="sep">·</span>
+      <a href="#">2257 Statement</a>
+      <span class="sep">·</span>
+      <a href="#">About</a>
+      <span class="sep">·</span>
+      <a href="#">Adult Content Disclaimer</a>
+    </div>
+  </footer>
+
+  <script src="data/videos.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

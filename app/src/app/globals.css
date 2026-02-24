@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0a;
+  --bg-surface: #111015;
+  --bg-card: #161420;
+  --bg-card-h: #1e1a28;
+  --accent: #e11d48;
+  --accent-2: #be123c;
+  --accent-glow: rgba(225, 29, 72, 0.35);
+  --border: rgba(255, 255, 255, 0.06);
+}
+
+body {
+  background: var(--bg);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2535;
+  border-radius: 3px;
+}
+
+@keyframes bounce-dot {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+@keyframes card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

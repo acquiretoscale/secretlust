@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Prevent search engines from indexing admin -->
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin · SecretlustAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="admin-page">
+
+  <!-- ══ Admin Header ══ -->
+  <div class="admin-header">
+    <a href="index.html" class="logo">
+      <span class="logo-icon" style="width:28px;height:28px;">
+        <svg width="16" height="16" viewBox="0 0 22 22" fill="none"><path d="M11 2C6.03 2 2 6.03 2 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm1 14.5v-4.5H8V10h4V7.5l3.5 3.5-3.5 3.5z" fill="white"/></svg>
+      </span>
+      <span class="logo-text" style="font-size:1rem;">SecretlustAI</span>
+    </a>
+    <span class="admin-badge">ADMIN PANEL</span>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- ══ Sidebar ══ -->
+    <aside class="admin-sidebar">
+      <a href="#" class="sidebar-link active" data-section="videos">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.882v6.236a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+        Videos
+      </a>
+      <a href="#" class="sidebar-link" data-section="add">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add video
+      </a>
+      <a href="#" class="sidebar-link" data-section="settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+    </aside>
+
+    <!-- ══ Content ══ -->
+    <div class="admin-content">
+
+      <!-- ── Videos list ── -->
+      <section id="section-videos" class="admin-section active">
+        <h2>All Videos</h2>
+
+        <div class="info-box">
+          <strong>R2 Hosting:</strong> Set video <code>src</code> and <code>thumb</code> to your Cloudflare R2 public URLs
+          (e.g. <code>https://pub-xxxxxxxx.r2.dev/videos/1.mp4</code>).<br>
+          Data is saved to <strong>localStorage</strong> here and used by the landing page.
+          Use <strong>Export JSON</strong> to get the final <code>data/videos.js</code> content.<br>
+          <strong>Supabase:</strong> When ready, replace the localStorage logic in <code>main.js</code>
+          and <code>admin.html</code> with a Supabase client fetch.
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;gap:0.75rem;">
+          <button class="export-btn" onclick="exportJSON()">⬇ Export videos.js</button>
+          <button class="export-btn" onclick="resetToDefault()">↺ Reset to defaults</button>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="video-table" id="videos-table">
+            <thead>
+              <tr>
+                <th>Thumb</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Video src (R2 URL)</th>
+                <th>Used</th>
+                <th>Featured</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="videos-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Add video ── -->
+      <section id="section-add" class="admin-section">
+        <h2>Add / Edit Video</h2>
+        <form class="add-form" id="add-form" onsubmit="saveVideo(event)">
+          <input type="hidden" id="edit-id">
+
+          <div class="form-row">
+            <label class="form-label">Title *</label>
+            <input class="form-input" id="f-title" placeholder="e.g. Doggy Style POV" required>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">
+              Video URL (R2) *
+              <span style="font-size:0.75rem;opacity:0.6;margin-left:4px;">e.g. https://pub-xxx.r2.dev/videos/1.mp4 or vids/1.mp4</span>
+            </label>
+            <input class="form-input" id="f-src" placeholder="https://pub-xxxxxxxx.r2.dev/videos/1.mp4" required>
+          </div>
+
+          <div class="form-row">
+            <label class="form-label">
+              Thumbnail URL (R2 / local)
+              <span style="font-size:0.75rem;opacity:0.6;margin-left:4px;">Leave blank to auto-generate from video</span>
+            </label>
+            <input class="form-input" id="f-thumb" placeholder="https://pub-xxxxxxxx.r2.dev/thumbs/1.jpg">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">Used count</label>
+              <input class="form-input" id="f-used" placeholder="e.g. 5.8K">
+            </div>
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">Label (optional)</label>
+              <input class="form-input" id="f-label" placeholder="HOT, NEW, etc.">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:0.75rem;">
+            <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9rem;">
+              <input type="checkbox" id="f-featured" style="accent-color:var(--accent);width:16px;height:16px;">
+              Set as featured / hero card (replaces current featured)
+            </label>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+            <button class="btn-add" type="submit">Save video</button>
+            <button type="button" class="export-btn" onclick="cancelEdit()">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ── Settings ── -->
+      <section id="section-settings" class="admin-section">
+        <h2>Settings</h2>
+        <div class="info-box">
+          <strong>Supabase integration:</strong><br>
+          1. Create a Supabase project and add a <code>videos</code> table with columns:
+          <code>id, title, src, thumb, used, featured, featured_label, created_at</code>.<br>
+          2. In <code>main.js</code>, replace <code>getVideos()</code> with a fetch to your Supabase endpoint.<br>
+          3. In <code>admin.html</code>, replace localStorage calls with Supabase insert/update/delete.<br><br>
+          <strong>Cloudflare R2 setup:</strong><br>
+          1. Create a bucket in Cloudflare R2 and enable public access.<br>
+          2. Upload videos. Your public URL format: <code>https://pub-[id].r2.dev/[filename]</code><br>
+          3. Use those URLs as <code>src</code> and <code>thumb</code> in the video entries above.
+        </div>
+
+        <div class="form-row" style="max-width:400px;">
+          <label class="form-label">Initial batch size (cards in first load)</label>
+          <input class="form-input" id="s-initial" type="number" value="10" min="1" max="50">
+        </div>
+        <div class="form-row" style="max-width:400px;">
+          <label class="form-label">Scroll batch size (cards per scroll load)</label>
+          <input class="form-input" id="s-scroll" type="number" value="10" min="1" max="50">
+        </div>
+        <button class="btn-add" onclick="saveSettings()">Save settings</button>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="data/videos.js"></script>
+<script>
+(function(){
+  // ── Data helpers ───────────────────────────────────────────────────────
+  function getVideos() {
+    try {
+      var stored = localStorage.getItem('secretlust_videos');
+      if (stored) { var p = JSON.parse(stored); if (Array.isArray(p)) return p; }
+    } catch(e){}
+    return (typeof SECRETLUST_VIDEOS !== 'undefined') ? JSON.parse(JSON.stringify(SECRETLUST_VIDEOS)) : [];
+  }
+
+  function saveVideos(arr) {
+    localStorage.setItem('secretlust_videos', JSON.stringify(arr));
+  }
+
+  // ── Render table ────────────────────────────────────────────────────────
+  function renderTable() {
+    var videos = getVideos();
+    var tbody = document.getElementById('videos-tbody');
+    tbody.innerHTML = '';
+    if (!videos.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:2rem;">No videos yet. Add one →</td></tr>';
+      return;
+    }
+    videos.forEach(function(v) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = [
+        '<td>' + (v.thumb ? '<img class="tbl-thumb" src="' + esc(v.thumb) + '" alt="" onerror="this.style.opacity=0.2">' : '<div class="tbl-thumb" style="opacity:0.2;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:white;">N/A</div>') + '</td>',
+        '<td style="color:var(--text-muted);">' + v.id + '</td>',
+        '<td><strong>' + esc(v.title) + '</strong></td>',
+        '<td class="tbl-src">' + esc(v.src || '') + '</td>',
+        '<td>' + esc(v.used || '—') + '</td>',
+        '<td>' + (v.featured ? '<span class="featured-pill">★ FEATURED</span>' : '') + '</td>',
+        '<td>',
+          '<button class="btn-feat" onclick="editVideo(' + v.id + ')">Edit</button>',
+          '<button class="btn-feat" onclick="setFeatured(' + v.id + ')">Set featured</button>',
+          '<button class="btn-del" onclick="deleteVideo(' + v.id + ')">Delete</button>',
+        '</td>'
+      ].join('');
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ── CRUD ────────────────────────────────────────────────────────────────
+  window.saveVideo = function(e) {
+    e.preventDefault();
+    var videos = getVideos();
+    var editId = document.getElementById('edit-id').value;
+    var isFeatured = document.getElementById('f-featured').checked;
+
+    // Un-feature others if this is featured
+    if (isFeatured) videos.forEach(function(v){ v.featured = false; });
+
+    var entry = {
+      id:           editId ? parseInt(editId) : Date.now(),
+      title:        document.getElementById('f-title').value.trim(),
+      src:          document.getElementById('f-src').value.trim(),
+      thumb:        document.getElementById('f-thumb').value.trim(),
+      used:         document.getElementById('f-used').value.trim(),
+      featuredLabel:document.getElementById('f-label').value.trim() || 'HOT',
+      featured:     isFeatured
+    };
+
+    if (editId) {
+      var idx = videos.findIndex(function(v){ return v.id == editId; });
+      if (idx > -1) videos[idx] = entry; else videos.push(entry);
+    } else {
+      videos.push(entry);
+    }
+
+    saveVideos(videos);
+    renderTable();
+    cancelEdit();
+    showSection('videos');
+    showToast('Video saved!');
+  };
+
+  window.deleteVideo = function(id) {
+    if (!confirm('Delete this video?')) return;
+    var videos = getVideos().filter(function(v){ return v.id != id; });
+    saveVideos(videos);
+    renderTable();
+  };
+
+  window.setFeatured = function(id) {
+    var videos = getVideos();
+    videos.forEach(function(v){ v.featured = (v.id == id); });
+    saveVideos(videos);
+    renderTable();
+    showToast('Featured updated');
+  };
+
+  window.editVideo = function(id) {
+    var v = getVideos().find(function(v){ return v.id == id; });
+    if (!v) return;
+    showSection('add');
+    document.getElementById('edit-id').value = v.id;
+    document.getElementById('f-title').value  = v.title || '';
+    document.getElementById('f-src').value    = v.src   || '';
+    document.getElementById('f-thumb').value  = v.thumb || '';
+    document.getElementById('f-used').value   = v.used  || '';
+    document.getElementById('f-label').value  = v.featuredLabel || '';
+    document.getElementById('f-featured').checked = !!v.featured;
+  };
+
+  window.cancelEdit = function() {
+    document.getElementById('edit-id').value = '';
+    document.getElementById('add-form').reset();
+  };
+
+  // ── Export videos.js ────────────────────────────────────────────────────
+  window.exportJSON = function() {
+    var videos = getVideos();
+    var content = [
+      '// SecretlustAI – Video data (exported from admin panel)',
+      '// Copy this file to data/videos.js',
+      '',
+      'var SECRETLUST_VIDEOS = ' + JSON.stringify(videos, null, 2) + ';',
+      '',
+      'var INITIAL_BATCH = 10;',
+      'var SCROLL_BATCH  = 10;'
+    ].join('\n');
+    var blob = new Blob([content], {type:'text/javascript'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'videos.js';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  window.resetToDefault = function() {
+    if (!confirm('Reset all videos to the default list from data/videos.js?')) return;
+    localStorage.removeItem('secretlust_videos');
+    renderTable();
+    showToast('Reset to defaults');
+  };
+
+  // ── Settings ─────────────────────────────────────────────────────────────
+  window.saveSettings = function() {
+    var initial = parseInt(document.getElementById('s-initial').value) || 10;
+    var scroll  = parseInt(document.getElementById('s-scroll').value)  || 10;
+    localStorage.setItem('secretlust_initial_batch', initial);
+    localStorage.setItem('secretlust_scroll_batch',  scroll);
+    showToast('Settings saved');
+  };
+
+  // Load saved settings
+  var si = localStorage.getItem('secretlust_initial_batch');
+  var ss = localStorage.getItem('secretlust_scroll_batch');
+  if (si) document.getElementById('s-initial').value = si;
+  if (ss) document.getElementById('s-scroll').value  = ss;
+
+  // ── Sidebar navigation ────────────────────────────────────────────────────
+  function showSection(id) {
+    document.querySelectorAll('.admin-section').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelectorAll('.sidebar-link').forEach(function(l){ l.classList.remove('active'); });
+    var sec = document.getElementById('section-' + id);
+    if (sec) sec.classList.add('active');
+    var link = document.querySelector('[data-section="' + id + '"]');
+    if (link) link.classList.add('active');
+  }
+
+  document.querySelectorAll('.sidebar-link').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      showSection(this.getAttribute('data-section'));
+    });
+  });
+
+  // ── Toast ─────────────────────────────────────────────────────────────────
+  function showToast(msg) {
+    var t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style, {
+      position:'fixed', bottom:'1.5rem', right:'1.5rem',
+      background:'var(--bg-card)', border:'1px solid var(--border)',
+      color:'#fff', padding:'0.65rem 1.1rem', borderRadius:'8px',
+      fontSize:'0.9rem', fontWeight:'600', zIndex:'999',
+      boxShadow:'0 4px 16px rgba(0,0,0,0.4)',
+      transition:'opacity 0.4s'
+    });
+    document.body.appendChild(t);
+    setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 400); }, 2200);
+  }
+
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Init
+  renderTable();
+})();
+</script>
+</body>
+</html>

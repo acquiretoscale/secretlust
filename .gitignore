@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# dependencies
+**/node_modules/
+
+# next.js build output
+**/.next/
+**/out/
+
+# logs / misc
+**/*.log
+
+# Ignore scraped competitor HTML/assets in repo root
+SugarGenBox*.html
+SugarGenBox*_files/
+
+# Local tooling state
+**/.wrangler/
+
+# Reference scrape folder (not part of product)
+ref/
+

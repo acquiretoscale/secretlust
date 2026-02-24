@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in · SecretlustAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-box">
+      <div class="login-logo">
+        <a href="index.html" class="logo">
+          <span class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M11 2C6.03 2 2 6.03 2 11s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm1 14.5v-4.5H8V10h4V7.5l3.5 3.5-3.5 3.5z" fill="white"/></svg>
+          </span>
+          <span class="logo-text">SecretlustAI</span>
+        </a>
+      </div>
+
+      <div class="login-tabs">
+        <a href="#" class="active" data-tab="signin">Sign in</a>
+        <a href="#" data-tab="signup">Create account</a>
+      </div>
+
+      <div id="signin" class="panel active">
+        <form onsubmit="return false;">
+          <label class="field-label" for="s-email">Email</label>
+          <input class="field-input" type="email" id="s-email" placeholder="you@example.com" required>
+          <label class="field-label" for="s-pass">Password</label>
+          <input class="field-input" type="password" id="s-pass" placeholder="••••••••" required>
+          <button class="btn-submit" type="submit">Sign in</button>
+        </form>
+      </div>
+
+      <div id="signup" class="panel">
+        <form onsubmit="return false;">
+          <label class="field-label" for="u-email">Email</label>
+          <input class="field-input" type="email" id="u-email" placeholder="you@example.com" required>
+          <label class="field-label" for="u-pass">Password</label>
+          <input class="field-input" type="password" id="u-pass" placeholder="Min. 8 characters" required>
+          <button class="btn-submit" type="submit">Create account</button>
+        </form>
+      </div>
+
+      <a href="index.html" class="login-back">← Back to templates</a>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.login-tabs a').forEach(function(a){
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        var tab = this.getAttribute('data-tab');
+        document.querySelectorAll('.login-tabs a').forEach(function(x){ x.classList.remove('active'); });
+        document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+        this.classList.add('active');
+        var panel = document.getElementById(tab);
+        if (panel) panel.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

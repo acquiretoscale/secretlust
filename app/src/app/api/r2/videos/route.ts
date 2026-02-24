@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
+import { S3Client, ListObjectsV2Command, type ListObjectsV2CommandOutput } from "@aws-sdk/client-s3";
 
 function requireEnv(name: string): string {
   const v = process.env[name];
@@ -55,7 +55,7 @@ export async function GET() {
     let continuationToken: string | undefined = undefined;
 
     do {
-      const out = await s3.send(
+      const out: ListObjectsV2CommandOutput = await s3.send(
         new ListObjectsV2Command({
           Bucket: bucket,
           Prefix: prefix,

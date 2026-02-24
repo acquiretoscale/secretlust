@@ -43,10 +43,11 @@ export default function VideoGrid({
         new Promise((r) => setTimeout(r, LOAD_DELAY_MS)),
       ]);
 
-      if (data && data.length > 0) {
-        setVideos((prev) => [...prev, ...data]);
+      const rows = (data as Video[]) || [];
+      if (rows.length > 0) {
+        setVideos((prev) => [...prev, ...rows]);
         setPage((p) => p + 1);
-        if (data.length < PAGE_SIZE) setHasMore(false);
+        if (rows.length < PAGE_SIZE) setHasMore(false);
       } else {
         setHasMore(false);
       }
